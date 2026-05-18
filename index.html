@@ -347,7 +347,7 @@
             const addSong = () => {
                 if (newSong.title.trim()) {
                     const newId = Math.max(...songs.map(s => s.id), 0) + 1;
-                    setS ongs([...songs, { ...newSong, id: newId }]);
+                    setSongs([...songs, { ...newSong, id: newId }]);
                     setNewSong({ title: '', soprano: '', alto: '', tenor: '' });
                     setShowAddSong(false);
                 }
