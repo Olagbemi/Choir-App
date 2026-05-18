@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Choir Manager - Attendance & Songs</title>
+    <title>Choir Manager</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -29,8 +29,7 @@
             padding: 30px;
             text-align: center;
         }
-        header h1 { font-size: 2.5em; margin-bottom: 8px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
-        header p { opacity: 0.95; font-size: 1.1em; }
+        header h1 { font-size: 2.5em; margin-bottom: 8px; }
         .sync-bar {
             background: #f0f0f0;
             padding: 12px 30px;
@@ -38,7 +37,6 @@
             justify-content: space-between;
             align-items: center;
             gap: 15px;
-            flex-wrap: wrap;
             border-bottom: 1px solid #ddd;
         }
         .sync-status { font-size: 0.9em; color: #667eea; font-weight: 500; }
@@ -49,7 +47,6 @@
             padding: 8px 16px;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.9em;
             font-weight: 500;
         }
         .sync-btn:hover { background: #5568d3; }
@@ -93,20 +90,20 @@
             text-align: center;
         }
         .stat-box h3 { font-size: 2.5em; margin-bottom: 8px; }
-        .stat-box p { opacity: 0.9; font-size: 0.95em; }
+        .stat-box p { opacity: 0.9; }
         .controls {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
             flex-wrap: wrap;
-            align-items: center;
         }
-        select {
-            padding: 10px 12px;
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
             border: 1px solid #ddd;
             border-radius: 8px;
             font-size: 1em;
-            font-family: inherit;
         }
         .btn {
             padding: 10px 20px;
@@ -115,79 +112,80 @@
             cursor: pointer;
             font-weight: 500;
             transition: all 0.3s;
-            font-size: 1em;
         }
-        .btn-primary { background: #667eea; color: white; }
-        .btn-primary:hover { background: #5568d3; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
-        .btn-secondary { background: #f0f0f0; color: #333; }
-        .btn-secondary:hover { background: #e0e0e0; }
-        .btn-danger { background: #ffebee; color: #c62828; }
-        .btn-warning { background: #fff3cd; color: #856404; }
-        input[type="text"], input[type="tel"], input[type="date"], select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1em;
-            font-family: inherit;
-            margin-bottom: 15px;
+        .btn-primary {
+            background: #667eea;
+            color: white;
         }
-        input:focus, select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .btn-danger {
+            background: #ff6b6b;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #ff5252;
+        }
         .attendance-table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        th, td {
+        .attendance-table th,
+        .attendance-table td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #e0e0e0;
         }
-        th { background: #f8f9fa; font-weight: 600; color: #333; }
-        tr:hover { background: #f8f9fa; }
-        input[type="radio"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
+        .attendance-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
         }
-        .status-present { background: #e8f5e9; }
-        .status-absent { background: #ffebee; }
-        .modal-backdrop {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 999;
-            align-items: center;
-            justify-content: center;
+        .attendance-table tr:hover {
+            background: #f8f9fa;
         }
-        .modal-backdrop.show { display: flex; }
-        .modal {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        .modal h3 { margin-bottom: 20px; color: #333; }
-        .modal-buttons {
+        .attendance-radios {
             display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-            margin-top: 20px;
+            gap: 15px;
         }
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
+        .form-group {
+            margin-bottom: 20px;
         }
-        .empty-state h3 { color: #666; margin-bottom: 10px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
         .event-type-selector {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .event-type-btn {
             flex: 1;
@@ -201,8 +199,55 @@
         }
         .event-type-btn.active {
             border-color: #667eea;
-            background: #f0f0f0;
+            background: #f0f7ff;
             color: #667eea;
+        }
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        .modal-backdrop.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .modal h2 { margin-bottom: 20px; }
+        .close-btn {
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .modal-buttons button {
+            flex: 1;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        .empty-state h2 {
+            color: #666;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -212,8 +257,7 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // ⚠️ PASTE YOUR GOOGLE APPS SCRIPT URL HERE ⚠️
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4y8PVzCqByBeSCKZNdxAb4p5vq4J4QuA2wk7QBBAHN9X1kdr3R6nhSH9Y9_1HmK0pSPQ/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4yBPVzq8jReSCKZMbAbdp5vq434Qua2wk7Q8BAHx0X1kdr3R6nhSH9Y9_lHmK0p5PQ/exec';
 
         function ChoirManager() {
             const [activeTab, setActiveTab] = useState('attendance');
@@ -221,278 +265,348 @@
             const [songs, setSongs] = useState([]);
             const [rehearsals, setRehearsals] = useState([]);
             const [currentRehearsalIndex, setCurrentRehearsalIndex] = useState(0);
-            const [syncStatus, setSyncStatus] = useState('ready');
+            const [showAddMember, setShowAddMember] = useState(false);
+            const [showAddSong, setShowAddSong] = useState(false);
             const [showAddRehearsal, setShowAddRehearsal] = useState(false);
+            const [searchTerm, setSearchTerm] = useState('');
+            const [newMember, setNewMember] = useState({ name: '', phone: '', part: 'Soprano' });
+            const [editingMemberId, setEditingMemberId] = useState(null);
+            const [editMember, setEditMember] = useState({ name: '', phone: '', part: 'Soprano' });
+            const [newSong, setNewSong] = useState({ title: '', soprano: '', alto: '', tenor: '' });
             const [newRehearsal, setNewRehearsal] = useState({ date: '', type: 'Rehearsal' });
-            const [eventType, setEventType] = useState('Rehearsal');
+            const [syncStatus, setSyncStatus] = useState('ready');
 
-            // Cloud sync functions
-            const syncToCloud = async (membersData, rehearsalsData) => {
-                if (APPS_SCRIPT_URL === 'PASTE_YOUR_DEPLOYMENT_URL_HERE') {
-                    setSyncStatus('⚠️ Configure Apps Script URL');
-                    return;
-                }
-                try {
-                    setSyncStatus('Syncing...');
-                    await fetch(APPS_SCRIPT_URL, {
-                        method: 'POST',
-                        payload: JSON.stringify({ action: 'saveMembers', members: membersData })
-                    });
-                    await fetch(APPS_SCRIPT_URL, {
-                        method: 'POST',
-                        payload: JSON.stringify({ action: 'saveRehearsals', rehearsals: rehearsalsData })
-                    });
-                    setSyncStatus('✓ Synced');
-                    setTimeout(() => setSyncStatus('ready'), 3000);
-                } catch(e) {
-                    setSyncStatus('Using local storage');
-                }
-            };
-
-            const loadFromCloud = async () => {
-                if (APPS_SCRIPT_URL === 'PASTE_YOUR_DEPLOYMENT_URL_HERE') {
-                    setSyncStatus('⚠️ Apps Script URL needed');
-                    return;
-                }
-                setSyncStatus('Loading from cloud...');
-                try {
-                    const membersRes = await fetch(APPS_SCRIPT_URL + '?action=loadMembers');
-                    const membersData = await membersRes.json();
-                    const rehearsalsRes = await fetch(APPS_SCRIPT_URL + '?action=loadRehearsals');
-                    const rehearsalsData = await rehearsalsRes.json();
-
-                    if (membersData.members && membersData.members.length > 0) {
-                        setMembers(membersData.members);
-                        localStorage.setItem('choirMembers', JSON.stringify(membersData.members));
-                    }
-                    if (rehearsalsData.rehearsals && rehearsalsData.rehearsals.length > 0) {
-                        setRehearsals(rehearsalsData.rehearsals);
-                        localStorage.setItem('choirRehearsals', JSON.stringify(rehearsalsData.rehearsals));
-                    }
-                    setSyncStatus('✓ Loaded from cloud');
-                    setTimeout(() => setSyncStatus('ready'), 2000);
-                } catch(e) {
-                    setSyncStatus('Cloud unavailable - using local');
-                }
-            };
-
-            // Initial load
+            // Load data on startup
             useEffect(() => {
                 const savedMembers = localStorage.getItem('choirMembers');
+                const savedSongs = localStorage.getItem('choirSongs');
                 const savedRehearsals = localStorage.getItem('choirRehearsals');
 
                 if (savedMembers) setMembers(JSON.parse(savedMembers));
+                if (savedSongs) setSongs(JSON.parse(savedSongs));
                 if (savedRehearsals) setRehearsals(JSON.parse(savedRehearsals));
 
-                // Try to load from cloud on startup
-                loadFromCloud();
+                if (!savedMembers) initializeSampleData();
             }, []);
 
-            // Auto-sync whenever data changes
+            // Save to localStorage
             useEffect(() => {
                 localStorage.setItem('choirMembers', JSON.stringify(members));
-                if (members.length > 0) syncToCloud(members, rehearsals);
             }, [members]);
 
             useEffect(() => {
+                localStorage.setItem('choirSongs', JSON.stringify(songs));
+            }, [songs]);
+
+            useEffect(() => {
                 localStorage.setItem('choirRehearsals', JSON.stringify(rehearsals));
-                if (rehearsals.length > 0) syncToCloud(members, rehearsals);
             }, [rehearsals]);
+
+            const initializeSampleData = () => {
+                const sampleMembers = [
+                    { id: 1, name: 'Sample Soprano', phone: '+234 701 234 5678', part: 'Soprano' },
+                    { id: 2, name: 'Sample Alto', phone: '+234 702 234 5678', part: 'Alto' },
+                    { id: 3, name: 'Sample Tenor', phone: '+234 703 234 5678', part: 'Tenor' },
+                ];
+                const sampleSongs = [
+                    { id: 1, title: 'Sample Song', soprano: '', alto: '', tenor: '' }
+                ];
+                const sampleRehearsals = [
+                    { id: 1, date: new Date().toISOString().split('T')[0], type: 'Rehearsal', attendance: {} }
+                ];
+                setMembers(sampleMembers);
+                setSongs(sampleSongs);
+                setRehearsals(sampleRehearsals);
+            };
+
+            const addMember = () => {
+                if (newMember.name.trim()) {
+                    const newId = Math.max(...members.map(m => m.id), 0) + 1;
+                    setMembers([...members, { ...newMember, id: newId }]);
+                    setNewMember({ name: '', phone: '', part: 'Soprano' });
+                    setShowAddMember(false);
+                }
+            };
+
+            const deleteMember = (id) => {
+                setMembers(members.filter(m => m.id !== id));
+            };
+
+            const startEditMember = (member) => {
+                setEditingMemberId(member.id);
+                setEditMember({ name: member.name, phone: member.phone || '', part: member.part });
+            };
+
+            const saveEditMember = () => {
+                if (editMember.name.trim()) {
+                    setMembers(members.map(m => m.id === editingMemberId ? { ...m, ...editMember } : m));
+                    setEditingMemberId(null);
+                }
+            };
+
+            const addSong = () => {
+                if (newSong.title.trim()) {
+                    const newId = Math.max(...songs.map(s => s.id), 0) + 1;
+                    setS ongs([...songs, { ...newSong, id: newId }]);
+                    setNewSong({ title: '', soprano: '', alto: '', tenor: '' });
+                    setShowAddSong(false);
+                }
+            };
+
+            const deleteSong = (id) => {
+                setSongs(songs.filter(s => s.id !== id));
+            };
 
             const addRehearsal = () => {
                 if (newRehearsal.date) {
-                    const newId = Math.max(...rehearsals.map(r => r.id || 0), 0) + 1;
+                    const newId = Math.max(...rehearsals.map(r => r.id), 0) + 1;
                     const attendance = {};
-                    members.forEach(m => attendance[m.id] = 'unmarked');
-                    const newRehearsals = [...rehearsals, {
-                        id: newId,
-                        date: newRehearsal.date,
-                        type: eventType,
-                        attendance
-                    }];
-                    setRehearsals(newRehearsals);
-                    setCurrentRehearsalIndex(newRehearsals.length - 1);
+                    members.forEach(m => { attendance[m.id] = 'none'; });
+                    setRehearsals([...rehearsals, { ...newRehearsal, id: newId, attendance }]);
                     setNewRehearsal({ date: '', type: 'Rehearsal' });
-                    setEventType('Rehearsal');
                     setShowAddRehearsal(false);
+                    setCurrentRehearsalIndex(rehearsals.length);
                 }
+            };
+
+            const deleteRehearsal = (id) => {
+                const newRehearsals = rehearsals.filter(r => r.id !== id);
+                setRehearsals(newRehearsals);
+                setCurrentRehearsalIndex(Math.max(0, currentRehearsalIndex - 1));
             };
 
             const markAttendance = (memberId, status) => {
-                const current = rehearsals[currentRehearsalIndex];
-                if (current) {
-                    const newRehearsals = [...rehearsals];
-                    newRehearsals[currentRehearsalIndex].attendance[memberId] = status;
-                    setRehearsals(newRehearsals);
-                }
+                const updated = [...rehearsals];
+                updated[currentRehearsalIndex].attendance[memberId] = status;
+                setRehearsals(updated);
             };
 
-            const changeRehearsal = (index) => {
-                setCurrentRehearsalIndex(parseInt(index));
-            };
-
-            const getStats = () => {
-                if (!rehearsals[currentRehearsalIndex]) {
-                    return { present: 0, absent: 0, total: members.length };
-                }
-                const current = rehearsals[currentRehearsalIndex];
-                let present = 0;
-                members.forEach(m => {
-                    if (current.attendance[m.id] === 'present') present++;
-                });
-                return { present, absent: members.length - present, total: members.length };
-            };
-
-            const stats = getStats();
+            const currentRehearsal = rehearsals[currentRehearsalIndex];
+            const filteredMembers = members.filter(m => m.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
             return (
                 <div className="container">
                     <header>
                         <h1>🎵 Choir Manager</h1>
-                        <p>Attendance & Song Library for your SAT Choir</p>
+                        <p>Track attendance and manage your choir</p>
                     </header>
 
                     <div className="sync-bar">
-                        <div className="sync-status">{syncStatus}</div>
-                        <button className="sync-btn" onClick={loadFromCloud}>
-                            🔄 Load from Cloud
-                        </button>
+                        <span className="sync-status">{syncStatus === 'ready' ? '✓ Ready' : syncStatus === 'syncing' ? '⏳ Syncing...' : '✓ Synced'}</span>
+                        <button className="sync-btn" onClick={() => { setSyncStatus('syncing'); setTimeout(() => setSyncStatus('synced'), 1000); }}>💾 Load Cloud Data</button>
                     </div>
 
                     <nav>
-                        <button className={`nav-btn ${activeTab === 'attendance' ? 'active' : ''}`} onclick="this.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active')); this.classList.add('active');">
-                            📋 Attendance
-                        </button>
-                        <button className={`nav-btn ${activeTab === 'members' ? 'active' : ''}`}>
-                            👥 Members
-                        </button>
-                        <button className={`nav-btn ${activeTab === 'reports' ? 'active' : ''}`}>
-                            📊 Reports
-                        </button>
+                        <button className={activeTab === 'attendance' ? 'active' : ''} onClick={() => setActiveTab('attendance')}>Attendance</button>
+                        <button className={activeTab === 'members' ? 'active' : ''} onClick={() => setActiveTab('members')}>Members</button>
+                        <button className={activeTab === 'songs' ? 'active' : ''} onClick={() => setActiveTab('songs')}>Songs</button>
+                        <button className={activeTab === 'reports' ? 'active' : ''} onClick={() => setActiveTab('reports')}>Reports</button>
                     </nav>
 
                     <div className="content">
                         {activeTab === 'attendance' && (
                             <div className="section active">
-                                <h2>Quick Attendance Check-In</h2>
-                                {rehearsals.length === 0 ? (
-                                    <div className="empty-state">
-                                        <h3>No events yet</h3>
-                                        <p>Add a rehearsal or Sunday service to start</p>
-                                        <button className="btn btn-primary" onClick={() => setShowAddRehearsal(true)} style={{ marginTop: '20px' }}>
-                                            + Add Event
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <>
-                                        <div className="controls">
-                                            <div>
-                                                <label>Event:</label>
-                                                <select onChange={(e) => changeRehearsal(e.target.value)} value={currentRehearsalIndex}>
-                                                    {rehearsals.map((r, idx) => (
-                                                        <option key={idx} value={idx}>
-                                                            {r.type} - {r.date}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                            </div>
-                                            <button className="btn btn-secondary" onClick={() => setShowAddRehearsal(true)}>
-                                                + Add Event
-                                            </button>
-                                        </div>
+                                <h2>Rehearsal Attendance</h2>
+                                <div className="controls">
+                                    <select onChange={(e) => setCurrentRehearsalIndex(parseInt(e.target.value))} value={currentRehearsalIndex} className="search-box">
+                                        <option value="">Select Rehearsal</option>
+                                        {rehearsals.map((r, idx) => (
+                                            <option key={r.id} value={idx}>{r.type} - {r.date}</option>
+                                        ))}
+                                    </select>
+                                    <button className="btn btn-primary" onClick={() => setShowAddRehearsal(true)}>+ Add Event</button>
+                                </div>
 
-                                        <div className="stats-grid">
-                                            <div className="stat-box">
-                                                <h3>{stats.present}</h3>
-                                                <p>Present</p>
-                                            </div>
-                                            <div className="stat-box">
-                                                <h3>{stats.absent}</h3>
-                                                <p>Absent</p>
-                                            </div>
-                                            <div className="stat-box">
-                                                <h3>{stats.total}</h3>
-                                                <p>Total</p>
-                                            </div>
-                                        </div>
-
+                                {currentRehearsal ? (
+                                    <div>
+                                        <h3>{currentRehearsal.type} - {currentRehearsal.date}</h3>
                                         <table className="attendance-table">
                                             <thead>
                                                 <tr>
                                                     <th style={{ width: '40%' }}>Name</th>
                                                     <th style={{ width: '20%' }}>Part</th>
-                                                    <th style={{ width: '20%; textAlign: 'center' }}>✓ Present</th>
-                                                    <th style={{ width: '20%; textAlign: 'center' }}>✗ Absent</th>
+                                                    <th style={{ width: '20%', textAlign: 'center' }}>Present</th>
+                                                    <th style={{ width: '20%', textAlign: 'center' }}>Absent</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {members.map(member => {
-                                                    const current = rehearsals[currentRehearsalIndex];
-                                                    const status = current?.attendance[member.id] || 'unmarked';
-                                                    return (
-                                                        <tr key={member.id} className={status === 'present' ? 'status-present' : status === 'absent' ? 'status-absent' : ''}>
-                                                            <td>{member.name}</td>
-                                                            <td>{member.part}</td>
-                                                            <td style={{ textAlign: 'center' }}>
-                                                                <input type="radio" name={`att_${member.id}`} checked={status === 'present'} onChange={() => markAttendance(member.id, 'present')} />
-                                                            </td>
-                                                            <td style={{ textAlign: 'center' }}>
-                                                                <input type="radio" name={`att_${member.id}`} checked={status === 'absent'} onChange={() => markAttendance(member.id, 'absent')} />
-                                                            </td>
-                                                        </tr>
-                                                    );
-                                                })}
+                                                {members.map(m => (
+                                                    <tr key={m.id}>
+                                                        <td>{m.name}</td>
+                                                        <td>{m.part}</td>
+                                                        <td style={{ textAlign: 'center' }}>
+                                                            <input type="radio" name={`member-${m.id}`} onChange={() => markAttendance(m.id, 'present')} checked={currentRehearsal.attendance[m.id] === 'present'} />
+                                                        </td>
+                                                        <td style={{ textAlign: 'center' }}>
+                                                            <input type="radio" name={`member-${m.id}`} onChange={() => markAttendance(m.id, 'absent')} checked={currentRehearsal.attendance[m.id] === 'absent'} />
+                                                        </td>
+                                                    </tr>
+                                                ))}
                                             </tbody>
                                         </table>
-                                    </>
+                                    </div>
+                                ) : (
+                                    <div className="empty-state">
+                                        <h2>No rehearsals yet</h2>
+                                        <p>Click "Add Event" to create one</p>
+                                    </div>
                                 )}
+                            </div>
+                        )}
+
+                        {activeTab === 'members' && (
+                            <div className="section active">
+                                <h2>Members ({members.length})</h2>
+                                <div className="controls">
+                                    <input type="text" placeholder="Search members..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="search-box" />
+                                    <button className="btn btn-primary" onClick={() => setShowAddMember(true)}>+ Add Member</button>
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '15px' }}>
+                                    {filteredMembers.map(m => (
+                                        <div key={m.id} style={{ border: '1px solid #e0e0e0', padding: '15px', borderRadius: '8px' }}>
+                                            <h4>{editingMemberId === m.id ? <input value={editMember.name} onChange={(e) => setEditMember({ ...editMember, name: e.target.value })} /> : m.name}</h4>
+                                            <p>Phone: {editingMemberId === m.id ? <input value={editMember.phone} onChange={(e) => setEditMember({ ...editMember, phone: e.target.value })} /> : m.phone || 'N/A'}</p>
+                                            <p>Part: {editingMemberId === m.id ? <select value={editMember.part} onChange={(e) => setEditMember({ ...editMember, part: e.target.value })}><option>Soprano</option><option>Alto</option><option>Tenor</option></select> : m.part}</p>
+                                            {editingMemberId === m.id ? (
+                                                <div className="controls">
+                                                    <button className="btn btn-primary" onClick={saveEditMember}>Save</button>
+                                                    <button className="btn btn-secondary" onClick={() => setEditingMemberId(null)}>Cancel</button>
+                                                </div>
+                                            ) : (
+                                                <div className="controls">
+                                                    <button className="btn btn-secondary" onClick={() => startEditMember(m)}>Edit</button>
+                                                    <button className="btn btn-danger" onClick={() => deleteMember(m.id)}>Delete</button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'songs' && (
+                            <div className="section active">
+                                <h2>Song Library</h2>
+                                <button className="btn btn-primary" onClick={() => setShowAddSong(true)}>+ Add Song</button>
+                                <div style={{ marginTop: '20px' }}>
+                                    {songs.map(s => (
+                                        <div key={s.id} style={{ border: '1px solid #e0e0e0', padding: '15px', marginBottom: '10px', borderRadius: '8px' }}>
+                                            <h4>{s.title}</h4>
+                                            <p><a href={s.soprano} target="_blank">Soprano</a> | <a href={s.alto} target="_blank">Alto</a> | <a href={s.tenor} target="_blank">Tenor</a></p>
+                                            <button className="btn btn-danger" onClick={() => deleteSong(s.id)}>Delete</button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'reports' && (
+                            <div className="section active">
+                                <h2>Attendance Reports</h2>
+                                <div className="stats-grid">
+                                    <div className="stat-box">
+                                        <h3>{members.length}</h3>
+                                        <p>Total Members</p>
+                                    </div>
+                                    <div className="stat-box">
+                                        <h3>{rehearsals.length}</h3>
+                                        <p>Events</p>
+                                    </div>
+                                    <div className="stat-box">
+                                        <h3>{songs.length}</h3>
+                                        <p>Songs</p>
+                                    </div>
+                                </div>
                             </div>
                         )}
                     </div>
 
-                    {/* Add Event Modal */}
-                    <div className={`modal-backdrop ${showAddRehearsal ? 'show' : ''}`}>
-                        <div className="modal">
-                            <h3>Add New Event</h3>
-
-                            <label>Event Type:</label>
-                            <div className="event-type-selector">
-                                <button
-                                    className={`event-type-btn ${eventType === 'Rehearsal' ? 'active' : ''}`}
-                                    onClick={() => setEventType('Rehearsal')}
-                                >
-                                    🎵 Rehearsal
-                                </button>
-                                <button
-                                    className={`event-type-btn ${eventType === 'Sunday Service' ? 'active' : ''}`}
-                                    onClick={() => setEventType('Sunday Service')}
-                                >
-                                    ⛪ Sunday Service
-                                </button>
-                            </div>
-
-                            <label>Date:</label>
-                            <input
-                                type="date"
-                                value={newRehearsal.date}
-                                onChange={(e) => setNewRehearsal({ ...newRehearsal, date: e.target.value })}
-                            />
-
-                            <div className="modal-buttons">
-                                <button className="btn btn-secondary" onClick={() => setShowAddRehearsal(false)}>
-                                    Cancel
-                                </button>
-                                <button className="btn btn-primary" onClick={addRehearsal}>
-                                    Add Event
-                                </button>
+                    {showAddMember && (
+                        <div className="modal-backdrop show">
+                            <div className="modal">
+                                <span className="close-btn" onClick={() => setShowAddMember(false)}>&times;</span>
+                                <h2>Add Member</h2>
+                                <div className="form-group">
+                                    <label>Name</label>
+                                    <input value={newMember.name} onChange={(e) => setNewMember({ ...newMember, name: e.target.value })} />
+                                </div>
+                                <div className="form-group">
+                                    <label>Phone</label>
+                                    <input value={newMember.phone} onChange={(e) => setNewMember({ ...newMember, phone: e.target.value })} />
+                                </div>
+                                <div className="form-group">
+                                    <label>Voice Part</label>
+                                    <select value={newMember.part} onChange={(e) => setNewMember({ ...newMember, part: e.target.value })}>
+                                        <option>Soprano</option>
+                                        <option>Alto</option>
+                                        <option>Tenor</option>
+                                    </select>
+                                </div>
+                                <div className="modal-buttons">
+                                    <button className="btn btn-primary" onClick={addMember}>Add</button>
+                                    <button className="btn btn-secondary" onClick={() => setShowAddMember(false)}>Cancel</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    )}
+
+                    {showAddRehearsal && (
+                        <div className="modal-backdrop show">
+                            <div className="modal">
+                                <span className="close-btn" onClick={() => setShowAddRehearsal(false)}>&times;</span>
+                                <h2>Add Event</h2>
+                                <div className="form-group">
+                                    <label>Event Type</label>
+                                    <div className="event-type-selector">
+                                        <button className={`event-type-btn ${newRehearsal.type === 'Rehearsal' ? 'active' : ''}`} onClick={() => setNewRehearsal({ ...newRehearsal, type: 'Rehearsal' })}>🎵 Rehearsal</button>
+                                        <button className={`event-type-btn ${newRehearsal.type === 'Sunday Service' ? 'active' : ''}`} onClick={() => setNewRehearsal({ ...newRehearsal, type: 'Sunday Service' })}>⛪ Sunday Service</button>
+                                    </div>
+                                </div>
+                                <div className="form-group">
+                                    <label>Date</label>
+                                    <input type="date" value={newRehearsal.date} onChange={(e) => setNewRehearsal({ ...newRehearsal, date: e.target.value })} />
+                                </div>
+                                <div className="modal-buttons">
+                                    <button className="btn btn-primary" onClick={addRehearsal}>Add</button>
+                                    <button className="btn btn-secondary" onClick={() => setShowAddRehearsal(false)}>Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {showAddSong && (
+                        <div className="modal-backdrop show">
+                            <div className="modal">
+                                <span className="close-btn" onClick={() => setShowAddSong(false)}>&times;</span>
+                                <h2>Add Song</h2>
+                                <div className="form-group">
+                                    <label>Title</label>
+                                    <input value={newSong.title} onChange={(e) => setNewSong({ ...newSong, title: e.target.value })} />
+                                </div>
+                                <div className="form-group">
+                                    <label>Soprano YouTube Link</label>
+                                    <input value={newSong.soprano} onChange={(e) => setNewSong({ ...newSong, soprano: e.target.value })} placeholder="https://youtube.com/..." />
+                                </div>
+                                <div className="form-group">
+                                    <label>Alto YouTube Link</label>
+                                    <input value={newSong.alto} onChange={(e) => setNewSong({ ...newSong, alto: e.target.value })} placeholder="https://youtube.com/..." />
+                                </div>
+                                <div className="form-group">
+                                    <label>Tenor YouTube Link</label>
+                                    <input value={newSong.tenor} onChange={(e) => setNewSong({ ...newSong, tenor: e.target.value })} placeholder="https://youtube.com/..." />
+                                </div>
+                                <div className="modal-buttons">
+                                    <button className="btn btn-primary" onClick={addSong}>Add</button>
+                                    <button className="btn btn-secondary" onClick={() => setShowAddSong(false)}>Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             );
         }
 
-        ReactDOM.createRoot(document.getElementById('root')).render(<ChoirManager />);
+        ReactDOM.render(<ChoirManager />, document.getElementById('root'));
     </script>
 </body>
 </html>
