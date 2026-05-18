@@ -503,7 +503,86 @@
                         {activeTab === 'reports' && (
                             <div className="section active">
                                 <h2>Attendance Reports</h2>
-                                <div className="stats-grid">
+
+                                <h3 style={{ marginTop: '30px', marginBottom: '15px' }}>📊 Summary by Event Date</h3>
+                                <table className="attendance-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Event Date</th>
+                                            <th style={{ textAlign: 'center' }}>Type</th>
+                                            <th style={{ background: '#e8f5e9', textAlign: 'center' }}>Present</th>
+                                            <th style={{ background: '#ffebee', textAlign: 'center' }}>Absent</th>
+                                            <th style={{ textAlign: 'center' }}>Total</th>
+                                            <th style={{ textAlign: 'center' }}>Attendance %</th>
+                                            <th style={{ textAlign: 'center' }}>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {rehearsals.length > 0 ? rehearsals.map(r => {
+                                            const present = Object.values(r.attendance).filter(s => s === 'present').length;
+                                            const absent = Object.values(r.attendance).filter(s => s === 'absent').length;
+                                            const total = members.length;
+                                            const percentage = total > 0 ? Math.round((present / total) * 100) : 0;
+                                            return (
+                                                <tr key={r.id}>
+                                                    <td><strong>{r.date}</strong></td>
+                                                    <td style={{ textAlign: 'center' }}>{r.type}</td>
+                                                    <td style={{ textAlign: 'center', background: '#e8f5e9' }}><strong>{present}</strong></td>
+                                                    <td style={{ textAlign: 'center', background: '#ffebee' }}><strong>{absent}</strong></td>
+                                                    <td style={{ textAlign: 'center' }}>{total}</td>
+                                                    <td style={{ textAlign: 'center', color: percentage >= 70 ? '#4caf50' : '#f44336' }}><strong>{percentage}%</strong></td>
+                                                    <td style={{ textAlign: 'center' }}><button className="btn btn-danger" onClick={() => deleteRehearsal(r.id)} style={{ padding: '5px 10px', fontSize: '0.9em' }}>Delete</button></td>
+                                                </tr>
+                                            );
+                                        }) : (
+                                            <tr>
+                                                <td colSpan="7" style={{ textAlign: 'center', padding: '20px' }}>No events yet</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+
+                                <h3 style={{ marginTop: '40px', marginBottom: '15px' }}>📋 Detailed Attendance History</h3>
+                                <table className="attendance-table">
+                                    <thead>
+                                        <tr>
+                                            <th style={{ width: '25%' }}>Member</th>
+                                            <th style={{ width: '15%' }}>Part</th>
+                                            {rehearsals.map(r => (
+                                                <th key={r.id} style={{ textAlign: 'center', fontSize: '0.9em' }}>{r.date}</th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {members.length > 0 ? members.map(m => (
+                                            <tr key={m.id}>
+                                                <td><strong>{m.name}</strong></td>
+                                                <td>{m.part}</td>
+                                                {rehearsals.map(r => {
+                                                    const status = r.attendance[m.id];
+                                                    let displayStatus = 'unmarked';
+                                                    let bgColor = '#f5f5f5';
+                                                    if (status === 'present') {
+                                                        displayStatus = '✓ Present';
+                                                        bgColor = '#e8f5e9';
+                                                    } else if (status === 'absent') {
+                                                        displayStatus = '✗ Absent';
+                                                        bgColor = '#ffebee';
+                                                    }
+                                                    return (
+                                                        <td key={r.id} style={{ textAlign: 'center', background: bgColor }}>{displayStatus}</td>
+                                                    );
+                                                })}
+                                            </tr>
+                                        )) : (
+                                            <tr>
+                                                <td colSpan={2 + rehearsals.length} style={{ textAlign: 'center', padding: '20px' }}>No members yet</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+
+                                <div className="stats-grid" style={{ marginTop: '40px' }}>
                                     <div className="stat-box">
                                         <h3>{members.length}</h3>
                                         <p>Total Members</p>
