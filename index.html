@@ -281,18 +281,25 @@
                 if (APPS_SCRIPT_URL.includes('PASTE') || !members.length) return;
                 try {
                     setSyncStatus('syncing');
-                    await fetch(APPS_SCRIPT_URL + '?action=saveMembers', {
+
+                    // Save members
+                    await fetch(APPS_SCRIPT_URL, {
                         method: 'POST',
-                        payload: JSON.stringify({ action: 'saveMembers', members: members })
-                    });
-                    await fetch(APPS_SCRIPT_URL + '?action=saveRehearsals', {
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'saveMembers', members: members })
+                    }).catch(e => console.log('Members sync error:', e));
+
+                    // Save rehearsals
+                    await fetch(APPS_SCRIPT_URL, {
                         method: 'POST',
-                        payload: JSON.stringify({ action: 'saveRehearsals', rehearsals: rehearsals })
-                    });
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'saveRehearsals', rehearsals: rehearsals })
+                    }).catch(e => console.log('Rehearsals sync error:', e));
+
                     setSyncStatus('synced');
                     setTimeout(() => setSyncStatus('ready'), 2000);
                 } catch(e) {
-                    console.log('Sync to cloud failed');
+                    console.log('Sync failed:', e);
                 }
             };
 
