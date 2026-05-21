@@ -257,7 +257,7 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwFNhlIK7VFl8IIvHb2TnjJoZB7o9d5sjjltF-MwscPc9nOHF4sS2xEjtEygSeSFLAL/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz4yBPVzq8jReSCKZMbAbdp5vq434Qua2wk7Q8BAHx0X1kdr3R6nhSH9Y9_lHmK0p5PQ/exec';
 
         function ChoirManager() {
             const [activeTab, setActiveTab] = useState('attendance');
@@ -276,6 +276,53 @@
             const [newRehearsal, setNewRehearsal] = useState({ date: '', type: 'Rehearsal' });
             const [syncStatus, setSyncStatus] = useState('ready');
 
+            // Cloud sync functions
+            const syncToCloud = async () => {
+                if (APPS_SCRIPT_URL.includes('PASTE') || !members.length) return;
+                try {
+                    setSyncStatus('syncing');
+                    await fetch(APPS_SCRIPT_URL + '?action=saveMembers', {
+                        method: 'POST',
+                        payload: JSON.stringify({ action: 'saveMembers', members: members })
+                    });
+                    await fetch(APPS_SCRIPT_URL + '?action=saveRehearsals', {
+                        method: 'POST',
+                        payload: JSON.stringify({ action: 'saveRehearsals', rehearsals: rehearsals })
+                    });
+                    setSyncStatus('synced');
+                    setTimeout(() => setSyncStatus('ready'), 2000);
+                } catch(e) {
+                    console.log('Sync to cloud failed');
+                }
+            };
+
+            const loadFromCloud = async () => {
+                if (APPS_SCRIPT_URL.includes('PASTE')) {
+                    alert('⚠️ Please configure Google Apps Script URL first');
+                    return;
+                }
+                try {
+                    setSyncStatus('syncing');
+                    const membersRes = await fetch(APPS_SCRIPT_URL + '?action=loadMembers');
+                    const membersData = await membersRes.json();
+                    const rehearsalsRes = await fetch(APPS_SCRIPT_URL + '?action=loadRehearsals');
+                    const rehearsalsData = await rehearsalsRes.json();
+
+                    if (membersData.members && membersData.members.length > 0) {
+                        setMembers(membersData.members);
+                    }
+                    if (rehearsalsData.rehearsals && rehearsalsData.rehearsals.length > 0) {
+                        setRehearsals(rehearsalsData.rehearsals);
+                    }
+                    setSyncStatus('synced');
+                    setTimeout(() => setSyncStatus('ready'), 2000);
+                    alert('✓ Cloud data loaded!');
+                } catch(e) {
+                    setSyncStatus('ready');
+                    console.log('Load from cloud failed', e);
+                }
+            };
+
             // Load data on startup
             useEffect(() => {
                 const savedMembers = localStorage.getItem('choirMembers');
@@ -290,8 +337,10 @@
             }, []);
 
             // Save to localStorage
+            // Save to localStorage AND sync to cloud
             useEffect(() => {
                 localStorage.setItem('choirMembers', JSON.stringify(members));
+                if (members.length > 0) syncToCloud();
             }, [members]);
 
             useEffect(() => {
@@ -300,6 +349,7 @@
 
             useEffect(() => {
                 localStorage.setItem('choirRehearsals', JSON.stringify(rehearsals));
+                if (rehearsals.length > 0) syncToCloud();
             }, [rehearsals]);
 
             const initializeSampleData = () => {
@@ -393,7 +443,7 @@
 
                     <div className="sync-bar">
                         <span className="sync-status">{syncStatus === 'ready' ? '✓ Ready' : syncStatus === 'syncing' ? '⏳ Syncing...' : '✓ Synced'}</span>
-                        <button className="sync-btn" onClick={() => { setSyncStatus('syncing'); setTimeout(() => setSyncStatus('synced'), 1000); }}>💾 Load Cloud Data</button>
+                        <button className="sync-btn" onClick={loadFromCloud}>💾 Load Cloud Data</button>
                     </div>
 
                     <nav>
